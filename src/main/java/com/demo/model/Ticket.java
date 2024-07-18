@@ -8,6 +8,8 @@ public class Ticket {
 
     private int id;
 
+    private String vehicleNumber;
+
     private Vehicle vehicle;
 
     private boolean isSubscriber;
@@ -22,6 +24,14 @@ public class Ticket {
 
     public int getId() {
         return id;
+    }
+
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
+
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
     }
 
     public Vehicle getVehicle() {

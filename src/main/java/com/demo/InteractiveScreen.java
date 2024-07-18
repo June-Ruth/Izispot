@@ -1,42 +1,53 @@
 package com.demo;
 
+import com.demo.dao.TicketDao;
+import com.demo.service.ParkingService;
+
 import java.util.Scanner;
 
 public class InteractiveScreen {
 
-    private final Scanner scanner = new Scanner(System.in);
-
     public InteractiveScreen() {}
+
+    private final Scanner scanner = new Scanner(System.in);
 
     private final InputReader inputReader = new InputReader(scanner);
 
-    private final RateCalculator rateCalculator = new RateCalculator();
+    private final ParkingService parkingService = new ParkingService(inputReader, new TicketDao());
 
-    static boolean isSubscriber;
-
-    static int durationInMinutes;
-
-    static double rate;
-
-    static Vehicle vehicle;
+    //private final RateCalculator rateCalculator = new RateCalculator();
 
     public void displayScreen() {
 
-        System.out.println("Bonjour. Avez-vous un abonnement ?");
+        System.out.println("Bienvenue!");
 
-        isSubscriber = inputReader.readSubscription();
+        boolean continueApp = true;
+        while (continueApp) {
+            System.out.println("Sélectionnez une option :");
+            System.out.println("1 - Véhicule entrant");
+            System.out.println("2 - Véhicule sortant");
+            System.out.println("3 - Quitter le système");
 
-        System.out.println("Votre véhicule est : \n 1. Une voiture \n 2. Une moto");
+            int option = inputReader.readOption();
 
-        vehicle = inputReader.readVehicle();
-
-        System.out.println("Combien de temps êtes vous resté dans le parking ?");
-
-        durationInMinutes = inputReader.readDuration();
-
-        rate = rateCalculator.calculateRate(vehicle, isSubscriber, durationInMinutes);
-
-        System.out.println("Votre ticket coûte " + rate + "€");
+            switch (option) {
+                case 1:
+                    parkingService.processIncomingVehicle();
+                    continueApp = false;
+                    break;
+                case 2:
+                    //TODO : process véhicule sortant
+                    continueApp = false;
+                    break;
+                case 3:
+                    //TODO : sortie du système
+                    continueApp = false;
+                    break;
+                default:
+                    System.out.println("Mauvaise option, veuillez entrer 1, 2 ou 3");
+                    break;
+            }
+        }
     }
 
 }

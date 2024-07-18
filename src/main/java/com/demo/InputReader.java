@@ -10,6 +10,10 @@ public class InputReader {
         this.scanner = scanner;
     }
 
+    public String readVehicleNumber() {
+        return scanner.nextLine();
+    }
+
     public boolean readSubscription() {
         return scanner.nextBoolean();
     }
@@ -18,8 +22,12 @@ public class InputReader {
         return scanner.nextInt();
     }
 
-    public Vehicle readVehicle() {
-        return scanner.nextInt() == 1 ? Vehicle.CAR : Vehicle.MOTO;
+    public int readVehicle() {
+        return scanner.nextInt();
+    }
+
+    public byte readOption() {
+        return scanner.nextByte();
     }
 
 }
