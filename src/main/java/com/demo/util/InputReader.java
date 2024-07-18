@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.util;
 
 import java.util.Scanner;
 
@@ -16,10 +16,6 @@ public class InputReader {
 
     public boolean readSubscription() {
         return scanner.nextBoolean();
-    }
-
-    public int readDuration() {
-        return scanner.nextInt();
     }
 
     public int readVehicle() {

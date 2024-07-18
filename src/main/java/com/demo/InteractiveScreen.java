@@ -2,10 +2,16 @@ package com.demo;
 
 import com.demo.dao.TicketDao;
 import com.demo.service.ParkingService;
+import com.demo.service.RateService;
+import com.demo.util.InputReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
 public class InteractiveScreen {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InteractiveScreen.class);
 
     public InteractiveScreen() {}
 
@@ -13,20 +19,22 @@ public class InteractiveScreen {
 
     private final InputReader inputReader = new InputReader(scanner);
 
-    private final ParkingService parkingService = new ParkingService(inputReader, new TicketDao());
+    private final TicketDao ticketDao = new TicketDao();
 
-    //private final RateCalculator rateCalculator = new RateCalculator();
+    private final RateService rateService = new RateService();
+
+    private final ParkingService parkingService = new ParkingService(inputReader, ticketDao, rateService);
 
     public void displayScreen() {
 
-        System.out.println("Bienvenue!");
+        LOGGER.info("Bienvenue!");
 
         boolean continueApp = true;
         while (continueApp) {
-            System.out.println("Sélectionnez une option :");
-            System.out.println("1 - Véhicule entrant");
-            System.out.println("2 - Véhicule sortant");
-            System.out.println("3 - Quitter le système");
+            LOGGER.info("Sélectionnez une option :");
+            LOGGER.info("1 - Véhicule entrant");
+            LOGGER.info("2 - Véhicule sortant");
+            LOGGER.info("3 - Quitter le système");
 
             int option = inputReader.readOption();
 
@@ -36,18 +44,17 @@ public class InteractiveScreen {
                     continueApp = false;
                     break;
                 case 2:
-                    //TODO : process véhicule sortant
+                    parkingService.processOutComingVehicle();
                     continueApp = false;
                     break;
                 case 3:
-                    //TODO : sortie du système
+                    LOGGER.info("Au revoir !");
                     continueApp = false;
                     break;
                 default:
-                    System.out.println("Mauvaise option, veuillez entrer 1, 2 ou 3");
+                    LOGGER.error("Mauvaise option, veuillez entrer 1, 2 ou 3");
                     break;
             }
         }
     }
-
 }

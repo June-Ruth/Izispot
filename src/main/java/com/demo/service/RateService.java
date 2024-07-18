@@ -1,15 +1,17 @@
-package com.demo;
+package com.demo.service;
 
-public class RateCalculator {
+import com.demo.model.Vehicle;
 
-    public RateCalculator() {}
+public class RateService {
+
+    public RateService() {}
 
     final double PRICE_PER_MINUTE_FOR_OCCASIONAL_CAR = 0.5;
     final double PRICE_PER_MINUTE_FOR_OCCASIONAL_MOTO = 0.4;
     final double PRICE_PER_MINUTE_FOR_SUBSCRIBER_CAR = 0.2;
     final double PRICE_PER_MINUTE_FOR_SUBSCRIBER_MOTO = 0.1;
 
-    public double calculateRate(Vehicle vehicle, boolean isSubscriber, int durationInMinutes) {
+    public double calculateRate(Vehicle vehicle, boolean isSubscriber, long durationInMinutes) {
         double result = 0;
         switch(vehicle) {
             case CAR:

@@ -1,7 +1,5 @@
 package com.demo.model;
 
-import com.demo.Vehicle;
-
 import java.time.LocalDateTime;
 
 public class Ticket {
@@ -24,6 +22,10 @@ public class Ticket {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getVehicleNumber() {

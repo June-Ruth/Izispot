@@ -1,21 +1,29 @@
 package com.demo.service;
 
-import com.demo.InputReader;
-import com.demo.Vehicle;
+import com.demo.util.InputReader;
+import com.demo.model.Vehicle;
 import com.demo.dao.TicketDao;
 import com.demo.model.Ticket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class ParkingService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParkingService.class);
 
     private InputReader inputReader;
 
     private TicketDao ticketDao;
 
-    public ParkingService(InputReader inputReader, TicketDao ticketDao) {
+    private RateService rateService;
+
+    public ParkingService(InputReader inputReader, TicketDao ticketDao, RateService rateService) {
         this.inputReader = inputReader;
         this.ticketDao = ticketDao;
+        this.rateService = rateService;
     }
 
     public void processIncomingVehicle() {
@@ -33,24 +41,40 @@ public class ParkingService {
         ticketDao.saveTicket(ticket);
     }
 
+    public void processOutComingVehicle() {
+        String vehicleNumber = getVehicleNumber();
+        Ticket ticketToUpdate = ticketDao.getTicket(vehicleNumber);
+        if(ticketToUpdate != null) {
+            LocalDateTime outTime = LocalDateTime.now();
+            long duration = Duration.between(ticketToUpdate.getInTime(), outTime).toMinutes();
+            double rate = rateService.calculateRate(ticketToUpdate.getVehicle(), ticketToUpdate.isSubscriber(), duration);
+            ticketToUpdate.setOutTime(outTime);
+            ticketToUpdate.setPrice(rate);
+            ticketDao.updateTicket(ticketToUpdate);
+            LOGGER.info("Le prix de votre ticket est de {}€. Bonne journée !", rate);
+        } else {
+            LOGGER.error("Ticket non trouvé");
+        }
+    }
+
     private String getVehicleNumber() {
         String vehicleNumber = null;
         while(vehicleNumber == null || vehicleNumber.isEmpty()) {
             try {
-                System.out.println("Merci de renseigner votre numéro de plaque");
+                LOGGER.info("Merci de renseigner votre numéro de plaque");
                 vehicleNumber = inputReader.readVehicleNumber();
                 if(vehicleNumber == null || vehicleNumber.isEmpty()) {
                     throw new IllegalArgumentException("Plaque du vehicule incorrect");
                 }
             } catch (IllegalArgumentException e) {
-                System.out.println("Merci d'entrer une plaque valide");
+                LOGGER.error("Merci d'entrer une plaque valide");
             }
         }
         return vehicleNumber;
     }
 
     private Vehicle getVehicleType() {
-        System.out.println("Votre véhicule est : \n 1. Une voiture \n 2. Une moto");
+        LOGGER.info("Votre véhicule est : \n 1. Une voiture \n 2. Une moto");
         int option;
         Vehicle vehicleType = null;
         do {
@@ -63,7 +87,7 @@ public class ParkingService {
                     vehicleType = Vehicle.MOTO;
                     break;
                 default:
-                    System.out.println("Veuillez rentrer un option valide");
+                    LOGGER.error("Veuillez rentrer un option valide");
                     break;
             }
         } while(option != 1 && option != 2);
@@ -71,7 +95,7 @@ public class ParkingService {
     }
 
     private boolean isSubscriber() {
-        System.out.println("Etes-vous abonné ?  (true ou false)");
+        LOGGER.info("Etes-vous abonné ?  (true ou false)");
         return inputReader.readSubscription();
     }
 

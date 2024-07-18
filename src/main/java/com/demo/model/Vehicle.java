@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.model;
 
 public enum Vehicle {
     CAR(1, "car") ,
