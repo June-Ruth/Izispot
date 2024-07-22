@@ -1,9 +1,17 @@
 package com.demo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 
+@Entity
 public class Ticket {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String vehicleNumber;
@@ -74,5 +82,14 @@ public class Ticket {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Ticket) {
+            return id == ((Ticket) obj).id;
+        } else {
+            return false;
+        }
     }
 }

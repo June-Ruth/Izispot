@@ -1,29 +1,25 @@
 package com.demo;
 
-import com.demo.dao.TicketDao;
 import com.demo.service.ParkingService;
-import com.demo.service.RateService;
 import com.demo.util.InputReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
-
+@Service
 public class InteractiveScreen {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InteractiveScreen.class);
 
-    public InteractiveScreen() {}
+    private final InputReader inputReader ;
 
-    private final Scanner scanner = new Scanner(System.in);
+    private final ParkingService parkingService;
 
-    private final InputReader inputReader = new InputReader(scanner);
+    public InteractiveScreen(InputReader inputReader, ParkingService parkingService) {
+        this.inputReader = inputReader;
+        this.parkingService = parkingService;
 
-    private final TicketDao ticketDao = new TicketDao();
-
-    private final RateService rateService = new RateService();
-
-    private final ParkingService parkingService = new ParkingService(inputReader, ticketDao, rateService);
+    }
 
     public void displayScreen() {
 
