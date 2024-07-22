@@ -1,36 +1,86 @@
 package com.demo.controller;
 
+import com.demo.dto.TicketOutDto;
+import com.demo.dto.converter.TicketConverter;
+import com.demo.model.Ticket;
+import com.demo.model.Vehicle;
+import com.demo.dto.TicketInDto;
+import com.demo.service.ParkingService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
 public class ParkingController {
 
-    //TODO :
-    // Etape 1 :
-    // Sélectionnez une option :
-    // 1 - Véhicule entrant
-    // 2 - Véhicule sortant
-    // 3 - Quitter le système
+    private final ParkingService parkingService;
 
-    // => Gestion sur Frontend
+    public ParkingController(ParkingService parkingService) {
+        this.parkingService = parkingService;
+    }
 
-    // TODO
-    // Etape 2 : Sélection = 1
-    // 1 - Merci de renseigner votre numéro de plaque - Gestion exception : numéro de plaque incorrecte
-    // 2 - Votre véhicule est : 1. Une voiture OU 2. Une moto - Gestion exception : type incorrect
-    // 3 - "Etes-vous abonné ?  (true ou false)"
-    // 4 - Service : process incoming vehicle
+    /*
+    Screen 1 : Sélectionnez une option :
+        1 - Véhicule entrant
+        2 - Véhicule sortant
+        3 - Quitter le système
+     */
 
-    // POST : /ticket => 3 paramètres : numéro de plaque, type vehicle, abonné
+    /*
+    Screen 2 : Sélection = 1
+        1 - Merci de renseigner votre numéro de plaque - Gestion exception : numéro de plaque incorrecte
+        2 - Votre véhicule est : 1. Une voiture OU 2. Une moto - Gestion exception : type incorrect
+        3 - "Etes-vous abonné ?  (true ou false)"
+    */
 
-    // Etape 3 : Selection = 2
-    // 1 - Merci de renseigner votre numéro de plaque - Gestion exception : numéro de plaque incorrecte
-    // GET : /ticket/{vehicleNumber}/inProgress
+    //@RequestMapping(value = "/ticket", method = RequestMethod.POST)
+    @PostMapping("/ticket")
+    @ResponseBody
+    public ResponseEntity<TicketInDto> fillAndRegisterTicket(@RequestParam("number") String vehicleNumber,
+                                                             @RequestParam("type") Vehicle vehicleType,
+                                                             @RequestParam("subscription") boolean isSubscriber) {
+        boolean isSaved = parkingService.processIncomingVehicle(vehicleNumber, vehicleType, isSubscriber);
+        if(isSaved) {
+            return ResponseEntity.status(201).body(new TicketInDto(vehicleNumber, vehicleType, isSubscriber));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
 
-    // 2 - Service : process outcoming vehicle
-    // PUT : /ticket/{id}
+        // return isSaved ? ResponseEntity.status(201).body(new TicketInDto(vehicleNumber, vehicleType, isSubscriber)) : ResponseEntity.badRequest().build();
+    }
 
-    // Etape 4 : Selection = 3
-    // - Quitter le système
-    // Gestion frontend
+    /*
+    Etape 3 : Selection = 2
+        1 - Merci de renseigner votre numéro de plaque - Gestion exception : numéro de plaque incorrecte
+     */
 
+    @GetMapping("/ticket/{number}/in_progress")
+    @ResponseBody
+    public ResponseEntity<TicketInDto> getTicketInProgress(@PathVariable("number") String vehicleNumber) {
+        Ticket ticket = parkingService.getTicketInProgress(vehicleNumber);
+        if(ticket == null) {
+             return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(TicketConverter.convertToTicketInDto(ticket));
+        }
+    }
 
+    /*
+        2 - Service : process outcoming vehicle
+     */
 
+    @PutMapping("/ticket/{id}")
+    @ResponseBody
+    public ResponseEntity<TicketOutDto> processOutGoing(@PathVariable("id") int id) {
+        Ticket ticket = parkingService.processOutComingVehicle(id);
+        if(ticket == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(TicketConverter.convertToTicketOutDto(ticket));
+        }
+    }
+
+    /*
+    Etape 4 : Selection = 3
+        - Quitter le système
+     */
 }

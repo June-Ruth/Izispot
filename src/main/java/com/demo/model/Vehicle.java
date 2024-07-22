@@ -1,8 +1,12 @@
 package com.demo.model;
 
 public enum Vehicle {
-    CAR(1, "car") ,
-    MOTO(2, "moto");
+    CAR( "CAR") ,
+    MOTO("MOTO");
 
-    Vehicle(int index, String label) {}
-}
+    public final String label;
+
+    Vehicle(String label) {
+        this.label = label;
+
+    }}

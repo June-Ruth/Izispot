@@ -1,8 +1,13 @@
 package com.demo.service;
 
+import com.demo.model.Ticket;
+import com.demo.model.Vehicle;
+
 public interface ParkingService {
 
-    void processIncomingVehicle();
+    boolean processIncomingVehicle(String vehicleNumber, Vehicle vehicleType, boolean isSubscriber);
 
-    void processOutComingVehicle();
+    Ticket getTicketInProgress(String vehicleNumber);
+
+    Ticket processOutComingVehicle(int id);
 }

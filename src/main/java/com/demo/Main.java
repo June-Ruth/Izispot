@@ -1,10 +1,12 @@
 package com.demo;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class Main {
 
-    private static final InteractiveScreen INTERACTIVE_SCREEN_IMPL = new InteractiveScreenImpl();
-
     public static void main(String[] args) {
-        INTERACTIVE_SCREEN_IMPL.displayScreen();
+        SpringApplication.run(Main.class, args);
     }
 }

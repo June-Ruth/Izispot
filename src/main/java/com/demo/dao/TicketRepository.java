@@ -9,5 +9,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     Ticket findByVehicleNumberAndOutTimeIsNull(String vehicleNumber);
 
-    Ticket update(Ticket ticket);
+    Ticket findById(int id);
 }
