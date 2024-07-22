@@ -8,6 +8,7 @@ public class TicketConverter {
 
     public static TicketInDto convertToTicketInDto(Ticket ticket) {
         TicketInDto ticketInDto = new TicketInDto();
+        ticketInDto.setId(ticket.getId());
         ticketInDto.setVehicleNumber(ticket.getVehicleNumber());
         ticketInDto.setVehicle(ticket.getVehicle());
         ticketInDto.setSubscriber(ticket.isSubscriber());

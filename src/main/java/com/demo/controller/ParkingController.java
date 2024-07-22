@@ -38,9 +38,9 @@ public class ParkingController {
     public ResponseEntity<TicketInDto> fillAndRegisterTicket(@RequestParam("number") String vehicleNumber,
                                                              @RequestParam("type") Vehicle vehicleType,
                                                              @RequestParam("subscription") boolean isSubscriber) {
-        boolean isSaved = parkingService.processIncomingVehicle(vehicleNumber, vehicleType, isSubscriber);
-        if(isSaved) {
-            return ResponseEntity.status(201).body(new TicketInDto(vehicleNumber, vehicleType, isSubscriber));
+        Ticket ticket = parkingService.processIncomingVehicle(vehicleNumber, vehicleType, isSubscriber);
+        if(ticket != null) {
+            return ResponseEntity.status(201).body(TicketConverter.convertToTicketInDto(ticket));
         } else {
             return ResponseEntity.badRequest().build();
         }

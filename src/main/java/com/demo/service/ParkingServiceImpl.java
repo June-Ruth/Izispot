@@ -21,7 +21,7 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public boolean processIncomingVehicle(String vehicleNumber, Vehicle vehicleType, boolean isSubscriber) {
+    public Ticket processIncomingVehicle(String vehicleNumber, Vehicle vehicleType, boolean isSubscriber) {
 
         LocalDateTime inTime = LocalDateTime.now().minusHours(1); // For dev only
 
@@ -31,7 +31,7 @@ public class ParkingServiceImpl implements ParkingService {
         ticket.setSubscriber(isSubscriber);
         ticket.setInTime(inTime);
 
-        return ticketRepository.save(ticket) != null;
+        return ticketRepository.save(ticket);
     }
 
     @Override

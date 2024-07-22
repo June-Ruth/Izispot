@@ -4,6 +4,8 @@ import com.demo.model.Vehicle;
 
 public class TicketInDto {
 
+    private int id;
+
     private String vehicleNumber;
 
     private Vehicle vehicle;
@@ -16,6 +18,14 @@ public class TicketInDto {
         this.vehicleNumber = vehicleNumber;
         this.vehicle = vehicle;
         this.isSubscriber = isSubscriber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getVehicleNumber() {
