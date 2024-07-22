@@ -13,18 +13,22 @@ public class InputReaderImpl implements InputReader {
         this.scanner = new Scanner(System.in);
     }
 
+    @Override
     public String readVehicleNumber() {
         return scanner.nextLine();
     }
 
+    @Override
     public boolean readSubscription() {
         return scanner.nextBoolean();
     }
 
+    @Override
     public int readVehicle() {
         return scanner.nextInt();
     }
 
+    @Override
     public byte readOption() {
         return scanner.nextByte();
     }
