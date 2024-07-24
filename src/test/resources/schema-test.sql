@@ -1,8 +1,8 @@
-drop database if exists parking_db;
+drop database if exists parking_db_test;
 
-create database if not exists parking_db;
+create database if not exists parking_db_test;
 
-use parking_db;
+use parking_db_test;
 
 create table if not exists ticket(
     ID int PRIMARY KEY AUTO_INCREMENT,
